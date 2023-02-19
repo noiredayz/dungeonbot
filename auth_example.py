@@ -13,6 +13,9 @@ clientID = ''
 nickname = ''
 default_channel = ''
 
-default_admin = 'Huwodro'
+default_admin = '' #username of the administrator
 
 reconnect_timer = 10
+
+website = ''
+api_website = ''
