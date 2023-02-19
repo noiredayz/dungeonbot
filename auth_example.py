@@ -20,3 +20,5 @@ reconnect_timer = 10
 website = ''
 leaderboard = ''
 api_website = ''
+
+userAgent = ''

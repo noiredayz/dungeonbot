@@ -276,7 +276,7 @@ def tag_user(user, tag, channel):
 ### Banphrase API ###
 
 def check_banphrase(message, channel_name):
-    headers = { 'User-Agent': 'huwobot (https://huwobot.com/)' }
+    headers = { 'User-Agent': ('dungeonbot (custom instance)' if len(auth.userAgent)==0 else auth.userAgent) }
     params = {'message': message}
 
     banphrase_api =  db(opt.CHANNELS).find_one({'name': channel_name})['banphrase_api']
