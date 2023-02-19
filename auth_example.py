@@ -18,4 +18,5 @@ default_admin = '' #username of the administrator
 reconnect_timer = 10
 
 website = ''
+leaderboard = ''
 api_website = ''
