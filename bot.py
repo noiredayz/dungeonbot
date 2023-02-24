@@ -154,6 +154,9 @@ while True:
 
         if resp.startswith('PING'):
             util.pong()
+		
+        if resp.startswith('RECONNECT'):
+			util.restart_on_reconnect()
 
         elif len(resp) > 0:
 

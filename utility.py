@@ -78,6 +78,13 @@ def get_user_id(user):
 def pong():
     sock.send(('PONG :tmi.twitch.tv\r\n').encode('utf-8'))
 
+def restart_on_reconnect():
+	t = time.localtime()
+	current_time = time.strftime("%d-%m-%Y %H:%M:%S", t)
+	sys.stdout.write(current_time + ': TMI asked us to reconnect, restarting bot\n')
+	sys.stdout.flush()
+	os.exit(0)
+
 last_time_symbol = 0
 def get_cooldown_bypass_symbol():
     global last_time_symbol
