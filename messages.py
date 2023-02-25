@@ -1,6 +1,8 @@
 import emoji
 import auth
 
+nlt2ping = 'monkaLaugh' + emoji.emojize(':thumbs_up:', language='alias') + 'I\'m here'
+
 commands = emoji.emojize(':memo:', language="alias") + ('For a list of commands, visit ' + auth.website if len(auth.website)>0 else 'No command list website is currently set :( ')
 
 leaderboard = emoji.emojize(':trophy:', language="alias") + ('Check the leaderboard here: ' + auth.leaderboard if len(auth.leaderboard) >0 else 'Leaderboard currently not available :( ')

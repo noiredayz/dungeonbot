@@ -251,7 +251,12 @@ while True:
                                     cmd.ping(channel)
                                     db(opt.CHANNELS).update_one_by_name(channel, { '$set': { 'cmd_use_time': time.time() } }, upsert=True)
                                     db(opt.USERS).update_one(user, { '$set': { 'cmd_use_time': time.time() } }, upsert=True)
-
+                                
+                                if params[0] == 'nlt2ping':
+                                    cmd.ping(nlt2ping)
+                                    db(opt.CHANNELS).update_one_by_name(channel, { '$set': { 'cmd_use_time': time.time() } }, upsert=True)
+                                    db(opt.USERS).update_one(user, { '$set': { 'cmd_use_time': time.time() } }, upsert=True)
+                                
                                 if params[0] == 'leaderboard' or params[0] == 'lb':
                                     cmd.leaderboard(channel)
                                     db(opt.CHANNELS).update_one_by_name(channel, { '$set': { 'cmd_use_time': time.time() } }, upsert=True)

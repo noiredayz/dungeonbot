@@ -19,6 +19,9 @@ bot_start = time.time()
 def commands(channel):
     util.send_message(messages.commands, channel)
 
+def nlt2ping(channel):
+    util.send_message(messages.nlt2ping, channel)
+
 def ping(channel):
     uptime = int(time.time() - bot_start)
     util.send_message(messages.ping(str(datetime.timedelta(seconds=uptime))), channel)
