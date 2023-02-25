@@ -253,7 +253,7 @@ while True:
                                     db(opt.USERS).update_one(user, { '$set': { 'cmd_use_time': time.time() } }, upsert=True)
                                 
                                 if params[0] == 'nlt2ping':
-                                    cmd.ping(nlt2ping)
+                                    cmd.nlt2ping(channel)
                                     db(opt.CHANNELS).update_one_by_name(channel, { '$set': { 'cmd_use_time': time.time() } }, upsert=True)
                                     db(opt.USERS).update_one(user, { '$set': { 'cmd_use_time': time.time() } }, upsert=True)
                                 
