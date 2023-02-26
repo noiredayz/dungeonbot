@@ -76,7 +76,7 @@ def raid_event():
                 util.queue_message_to_some(messages.raid_event_countdown(str(i)), channel_list)
                 time.sleep(message_interval)
             db(opt.GENERAL).update_one(0, { '$set': { 'raid_start': 0 } })
-            rand = random.randint(5400, 9000)
+            rand = random.randint(5400, 7200)
             db(opt.GENERAL).update_one(0, { '$set': { 'raid_time': time.time() + rand } })
             if len(raid_users) == 0:
                 if channel_list:
