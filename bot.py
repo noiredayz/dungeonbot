@@ -200,7 +200,26 @@ while True:
                                         continue
                             else:
                                 continue
-
+                            
+                            if params[0] == 'join':
+                                tags = db(opt.TAGS).find_one_by_id(user)
+                                if tags and tags.get('bot') == 1:
+                                    continue
+                                else:
+                                    dungeon = db(opt.GENERAL).find_one_by_id(0)
+                                    channel_raids = db(opt.CHANNELS).find_one({'name': channel})
+                                    if dungeon['raid_start'] == 1 and channel_raids['raid_events'] == 1:
+                                        if not [usr for usr in raid_users if user in usr]:
+                                            raid_user = db(opt.USERS).find_one_by_id(user)
+                                            if raid_user and raid_user.get('user_level'):
+                                                raid_users.append((channel, raid_user['_id']))
+                                            else:
+                                                if time.time() > user_cmd_use_time + global_cooldown:
+                                                    register_thread = threading.Thread(target = util.queue_message_to_one, args=(messages.not_registered(display_name), channel))
+                                                    register_thread.start()
+                                                    db(opt.USERS).update_one(user, { '$set': { 'cmd_use_time': time.time() } }, upsert=True)
+                                continue
+                            
                             try:
                                 user_cmd_use_time = db(opt.USERS).find_one_by_id(user)['cmd_use_time']
                             except:
@@ -293,24 +312,6 @@ while True:
 
                             if params[0] == 'register':
                                 cmd.register(user, display_name, channel)
-
-                            if params[0] == 'join':
-                                tags = db(opt.TAGS).find_one_by_id(user)
-                                if tags and tags.get('bot') == 1:
-                                    continue
-                                else:
-                                    dungeon = db(opt.GENERAL).find_one_by_id(0)
-                                    channel_raids = db(opt.CHANNELS).find_one({'name': channel})
-                                    if dungeon['raid_start'] == 1 and channel_raids['raid_events'] == 1:
-                                        if not [usr for usr in raid_users if user in usr]:
-                                            raid_user = db(opt.USERS).find_one_by_id(user)
-                                            if raid_user and raid_user.get('user_level'):
-                                                raid_users.append((channel, raid_user['_id']))
-                                            else:
-                                                if time.time() > user_cmd_use_time + global_cooldown:
-                                                    register_thread = threading.Thread(target = util.queue_message_to_one, args=(messages.not_registered(display_name), channel))
-                                                    register_thread.start()
-                                                    db(opt.USERS).update_one(user, { '$set': { 'cmd_use_time': time.time() } }, upsert=True)
 
                             if params[0] == 'suggest':
                                 cmd.suggest(display_name, channel, message[len(params[0])+2:])
