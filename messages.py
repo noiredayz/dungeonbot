@@ -8,7 +8,7 @@ commands = emoji.emojize(':memo:', language="alias") + ('For a list of commands,
 leaderboard = emoji.emojize(':trophy:', language="alias") + ('Check the leaderboard here: ' + auth.leaderboard if len(auth.leaderboard) >0 else 'Leaderboard currently not available :( ')
 
 def ping(uptime):
-    return emoji.emojize(' :stopwatch:', language="alias") + ' Dungeon Bot Uptime: ' + uptime + ' | For more information, visit ' + auth.api_website
+    return emoji.emojize(' :stopwatch:', language="alias") + ' Dungeon Bot Uptime: ' + uptime + ' | For more information, visit ' + auth.website
 
 def startup_message(branch, sha):
     return emoji.emojize(':arrow_right:', language="alias") + ' Dungeon Bot (' + branch + ', ' + sha[0:7] + ')'
