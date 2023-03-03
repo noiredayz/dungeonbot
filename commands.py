@@ -234,7 +234,7 @@ def raidstats(channel):
         util.send_message(messages.raid_general_stats(str(raids), raidword, str(wins), winword, str(losses), loseword, '0'), channel)
 
 def xp(user, display_name, channel, message=None):
-    if not message:
+    if not message or len(message)<3:
         tags = db(opt.TAGS).find_one_by_id(user)
         if tags and tags.get('bot') == 1:
             util.send_message(messages.user_bot_message(display_name), channel)
@@ -256,7 +256,7 @@ def xp(user, display_name, channel, message=None):
             util.send_message(messages.user_not_registered(display_name), channel)
 
 def lvl(user, display_name, channel, message=None):
-    if not message:
+    if not message or len(message)<3:
         tags = db(opt.TAGS).find_one_by_id(user)
         if tags and tags.get('bot') == 1:
             util.send_message(messages.user_bot_message(display_name), channel)
@@ -278,7 +278,7 @@ def lvl(user, display_name, channel, message=None):
             util.send_message(messages.user_not_registered(display_name), channel)
 
 def winrate(user, display_name, channel, message=None):
-    if not message:
+    if not message or len(message)<3:
         tags = db(opt.TAGS).find_one_by_id(user)
         if tags and tags.get('bot') == 1:
             util.send_message(messages.user_bot_message(display_name), channel)
