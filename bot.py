@@ -214,7 +214,7 @@ while True:
                                             if raid_user and raid_user.get('user_level'):
                                                 raid_users.append((channel, raid_user['_id']))
                                             else:
-                                                if time.time() > user_cmd_use_time + global_cooldown:
+                                                if time.time() > user_cmd_use_time + global_cooldown + 120:
                                                     register_thread = threading.Thread(target = util.queue_message_to_one, args=(messages.not_registered(display_name), channel))
                                                     register_thread.start()
                                                     db(opt.USERS).update_one(user, { '$set': { 'cmd_use_time': time.time() } }, upsert=True)
