@@ -146,12 +146,12 @@ while True:
     try:
         resp = emoji.demojize(util.sock.recv(4096).decode('utf-8'))
     except:
-		util.printtolog('Socket exception, trying to reconnect')
+        util.printtolog('Socket exception, trying to reconnect')
         util.sock.close()
         util.connect()
     else:
         if len(resp) == 0:
-			util.printtolog('Socket error: read 0 bytes. Trying to reconnect.\n')
+            util.printtolog('Socket error: read 0 bytes. Trying to reconnect.\n')
             util.sock.close()
             util.connect()
 
@@ -159,7 +159,7 @@ while True:
             util.pong()
         
         if resp.startswith('RECONNECT'):
-			util.printtolog('Twitch asked us to reconnect, restarting.\n')
+            util.printtolog('Twitch asked us to reconnect, restarting.\n')
             util.restart_on_reconnect()
 
         elif len(resp) > 0:
