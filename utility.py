@@ -35,7 +35,7 @@ def connect(manual = False):
         sock.send(('JOIN ' + channels + '\r\n').encode('utf-8'))
         t = time.localtime()
         current_time = time.strftime("%d-%m-%Y %H:%M:%S", t)
-        printtolog("Socket connected.")
+        printtolog("Socket connected.\n")
     except socket.error as e:
         printtolog('Socket error: ' + str(e.errno) + '\n')
         if not manual:

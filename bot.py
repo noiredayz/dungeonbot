@@ -77,7 +77,7 @@ def raid_event():
                 time.sleep(message_interval)
             db(opt.GENERAL).update_one(0, { '$set': { 'raid_start': 0 } })
             rand = random.randint(5400, 7200)
-            util.printtolog('Raids: next raid in '+rand+' seconds.\n')
+            util.printtolog('Raids: next raid in '+str(rand)+' seconds.\n')
             db(opt.GENERAL).update_one(0, { '$set': { 'raid_time': time.time() + rand } })
             if len(raid_users) == 0:
                 if channel_list:
@@ -146,7 +146,7 @@ while True:
     try:
         resp = emoji.demojize(util.sock.recv(4096).decode('utf-8'))
     except:
-        util.printtolog('Socket exception, trying to reconnect\n')
+        util.printtolog('Socket exception, trying to reconnect\nra')
         util.sock.close()
         util.connect()
     else:
