@@ -79,6 +79,7 @@ def pong():
     sock.send(('PONG :tmi.twitch.tv\r\n').encode('utf-8'))
     
 def printtolog(sText):
+    t = time.localtime()
     current_time = time.strftime("%Y-%m-%d %H:%M:%S", t)
     sys.stdout.write(current_time+" "+sText)
     sys.stdout.flush()
