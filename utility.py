@@ -35,11 +35,9 @@ def connect(manual = False):
         sock.send(('JOIN ' + channels + '\r\n').encode('utf-8'))
         t = time.localtime()
         current_time = time.strftime("%d-%m-%Y %H:%M:%S", t)
-        sys.stdout.write(current_time + ': SOCKET CONNECTED\n')
-        sys.stdout.flush()
+        printtolog("Socket connected.")
     except socket.error as e:
-        sys.stderr.write('SOCKET ERROR: ' + str(e.errno) + '\n')
-        sys.stderr.flush()
+        printtolog('Socket error: ' + str(e.errno) + '\n')
         if not manual:
             time.sleep(auth.reconnect_timer)
         else:
@@ -85,10 +83,7 @@ def printtolog(sText):
     sys.stdout.flush()
     
 def restart_on_reconnect():
-    t = time.localtime()
-    current_time = time.strftime("%d-%m-%Y %H:%M:%S", t)
-    sys.stdout.write(current_time + ': TMI asked us to reconnect, restarting bot\n')
-    sys.stdout.flush()
+    printtolog('TMI asked us to reconnect, restarting bot\n')
     os.exit(0)
 
 last_time_symbol = 0

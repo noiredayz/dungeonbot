@@ -146,7 +146,7 @@ while True:
     try:
         resp = emoji.demojize(util.sock.recv(4096).decode('utf-8'))
     except:
-        util.printtolog('Socket exception, trying to reconnect')
+        util.printtolog('Socket exception, trying to reconnect\n')
         util.sock.close()
         util.connect()
     else:
