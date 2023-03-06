@@ -1,7 +1,7 @@
-import random
 import time
+import secrets
 
-rand = random.randint(5400, 9000)
+rand = secrets.randbelow(1800)+5400
 
 GENERAL = {
     'dungeon_level': 0,

@@ -1,8 +1,8 @@
 import datetime
-import random
 import re
 import threading
 import time
+import secrets
 
 import emoji
 
@@ -79,14 +79,14 @@ def enterdungeon(user_id, display_name, channel):
                 util.send_message(messages.dungeon_too_low_level(display_name, str(dungeon_level)), channel)
                 return
 
-            dungeon_success = random.randint(1, 101)
+            dungeon_success = secrets.randbelow(100)+1
             db(opt.USERS).update_one(user['_id'], {'$set': {
                 'last_entry': enter_time,
                 'next_entry': enter_time + dungeon_timeout
             }})
 
             if dungeon_success <= success_rate:
-                run_quality = random.randint(1, 101)
+                run_quality = secrets.randbelow(100)+1
                 if run_quality <= 10:
                     experience_gain = int(experience_gain*0.5)
                     try:
@@ -102,7 +102,7 @@ def enterdungeon(user_id, display_name, channel):
                         message = 'Very Good Run'
                     util.send_message(messages.dungeon_very_good_run(display_name, message, str(experience_gain)), channel)
                 else:
-                    run_quality = random.randint(75,126)
+                    run_quality = secrets.randbelow(51)+75
                     experience_gain = int(experience_gain*run_quality*0.01)
                     if run_quality < 100:
                         try:

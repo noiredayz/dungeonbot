@@ -1,11 +1,11 @@
 from collections import defaultdict
 import math
-import random
 import re
 import sys
 import time
 import threading
 import traceback
+import secrets
 
 import emoji
 import requests
@@ -65,7 +65,7 @@ def raid_event():
         success_rate = 0
         dungeon = db(opt.GENERAL).find_one_by_id(0)
         if int(dungeon['raid_time'] - time.time()) <= 0:
-            raid_level = random.randint(1, dungeon['dungeon_level']+1)
+            raid_level = secrets.randbelow(dungeon['dungeon_level']+2)
             db(opt.GENERAL).update_one(0, { '$set': { 'raid_start': 1 } })
             time.sleep(0.5)
             channel_list = db(opt.CHANNELS).find({'online': 0, 'raid_events': 1}).distinct('name')
@@ -76,7 +76,7 @@ def raid_event():
                 util.queue_message_to_some(messages.raid_event_countdown(str(i)), channel_list)
                 time.sleep(message_interval)
             db(opt.GENERAL).update_one(0, { '$set': { 'raid_start': 0 } })
-            rand = random.randint(5400, 7200)
+            rand = secrets.randbelow(1800)+5400
             util.printtolog('Raids: next raid in '+str(rand)+' seconds.\n')
             db(opt.GENERAL).update_one(0, { '$set': { 'raid_time': time.time() + rand } })
             if len(raid_users) == 0:
@@ -92,7 +92,7 @@ def raid_event():
             if channel_list:
                 util.queue_message_to_some(messages.raid_event_start(str(len(raid_users)), user_word, str(success_rate/10)), channel_list)
             time.sleep(3)
-            raid_success = random.randint(1, 1001)
+            raid_success = secrets.randbelow(1001)+1
             if raid_success <= success_rate:
                 experience_gain = math.ceil(raid_level**1.2 * 27.5 / len(raid_users))
                 if channel_list:
@@ -146,7 +146,7 @@ while True:
     try:
         resp = emoji.demojize(util.sock.recv(4096).decode('utf-8'))
     except:
-        util.printtolog('Socket exception, trying to reconnect\nra')
+        util.printtolog('Socket exception, trying to reconnect.\n')
         util.sock.close()
         util.connect()
     else:
