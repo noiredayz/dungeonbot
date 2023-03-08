@@ -14,7 +14,6 @@ import auth
 import utility as util
 import commands as cmd
 import database as opt
-import schemes
 import messages
 
 db = opt.MongoDatabase
@@ -208,6 +207,14 @@ while True:
                                         continue
                             else:
                                 continue
+                            try:
+                                user_cmd_use_time = db(opt.USERS).find_one_by_id(user)['cmd_use_time']
+                            except:
+                                user_cmd_use_time = 0
+                            user_cooldown = db(opt.CHANNELS).find_one({'name': channel})['user_cooldown']
+                            global_cmd_use_time = db(opt.CHANNELS).find_one({'name': channel})['cmd_use_time']
+                            global_cooldown = db(opt.CHANNELS).find_one({'name': channel})['global_cooldown']
+                            message_queued = db(opt.CHANNELS).find_one({'name': channel})['message_queued']
                             
                             if params[0] == 'join':
                                 tags = db(opt.TAGS).find_one_by_id(user)
@@ -228,14 +235,6 @@ while True:
                                                     db(opt.USERS).update_one(user, { '$set': { 'cmd_use_time': time.time() } }, upsert=True)
                                 continue
                             
-                            try:
-                                user_cmd_use_time = db(opt.USERS).find_one_by_id(user)['cmd_use_time']
-                            except:
-                                user_cmd_use_time = 0
-                            user_cooldown = db(opt.CHANNELS).find_one({'name': channel})['user_cooldown']
-                            global_cmd_use_time = db(opt.CHANNELS).find_one({'name': channel})['cmd_use_time']
-                            global_cooldown = db(opt.CHANNELS).find_one({'name': channel})['global_cooldown']
-                            message_queued = db(opt.CHANNELS).find_one({'name': channel})['message_queued']
                             if time.time() > global_cmd_use_time + global_cooldown and time.time() > user_cmd_use_time + user_cooldown and message_queued == 0:
 
                                 db(opt.USERS).update_one(user, { '$set': { 'username': display_name } }, upsert=True)
