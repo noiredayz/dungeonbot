@@ -22,3 +22,5 @@ leaderboard = ''
 api_website = ''
 
 userAgent = ''
+
+raid_level_cap = 0 #0 - uncapped, any positive integer - raids' leve is capped to this
