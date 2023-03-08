@@ -33,8 +33,6 @@ def connect(manual = False):
         channel_list = db(opt.CHANNELS).find({}).distinct('name')
         channels = ','.join('#{0}'.format(c) for c in channel_list)
         sock.send(('JOIN ' + channels + '\r\n').encode('utf-8'))
-        t = time.localtime()
-        current_time = time.strftime("%d-%m-%Y %H:%M:%S", t)
         printtolog("Socket connected.\n")
     except socket.error as e:
         printtolog('Socket error: ' + str(e.errno) + '\n')
@@ -84,7 +82,7 @@ def printtolog(sText):
     
 def restart_on_reconnect():
     printtolog('TMI asked us to reconnect, restarting bot\n')
-    os.exit(0)
+    os._exit(0)
 
 last_time_symbol = 0
 def get_cooldown_bypass_symbol():
@@ -148,7 +146,8 @@ def git_info():
     repo = git.Repo(search_parent_directories=True)
     branch = repo.active_branch.name
     sha = repo.head.object.hexsha
-    queue_message_to_all(messages.startup_message(branch, sha))
+    #queue_message_to_all(messages.startup_message(branch, sha))
+    queue_message_to_one(messages.startup_message(branch, sha), auth.default_channel.lower())
 
 def start():
     default_admin_id = get_user_id(auth.default_admin)
