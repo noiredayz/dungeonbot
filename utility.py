@@ -22,24 +22,35 @@ db = opt.MongoDatabase
 server = 'irc.chat.twitch.tv'
 port = 6667
 
+JOINDELAY = 580 #20 joins per 10 seconds, used for normal accounts
+
 def connect(manual = False):
     global sock
     sock = socket.socket()
     try:
+        printtolog("Socket connecting...")
         sock.connect((server, port))
         sock.send(('PASS ' + auth.token + '\r\n').encode('utf-8'))
         sock.send(('NICK ' + auth.nickname + '\r\n').encode('utf-8'))
+        printtolog("Logged in, requesting capabilities and joinig channels.")
         sock.send(("CAP REQ :twitch.tv/tags\r\n").encode('utf-8'))
         channel_list = db(opt.CHANNELS).find({}).distinct('name')
-        channels = ','.join('#{0}'.format(c) for c in channel_list)
-        sock.send(('JOIN ' + channels + '\r\n').encode('utf-8'))
-        printtolog("Socket connected.\n")
+        #channels = ','.join('#{0}'.format(c) for c in channel_list)
+        #sock.send(('JOIN ' + channels + '\r\n').encode('utf-8'))
+        for c in channel_list:
+            joinIRCChannel(c)
+        printtolog("Channels joined successfully.")
     except socket.error as e:
-        printtolog('Socket error: ' + str(e.errno) + '\n')
+        printtolog('Socket error: ' + str(e.errno))
         if not manual:
             time.sleep(auth.reconnect_timer)
         else:
             os._exit(1) # Shuts down script if called from initialization
+
+def joinIRCChannel(channel):
+    printtolog("Joining #"+channel)
+    sock.send(('JOIN #' + channel + '\r\n').encode('utf-8'))
+    time.sleep(JOINDELAY)
 
 def get_display_name(id, list = None):
     headers = { 'Authorization': auth.bearer, 'Client-ID': auth.clientID }
@@ -77,11 +88,11 @@ def pong():
 def printtolog(sText):
     t = time.localtime()
     current_time = time.strftime("%Y-%m-%d %H:%M:%S", t)
-    sys.stdout.write(current_time+" "+sText)
+    sys.stdout.write(current_time+" "+sText+"\n")
     sys.stdout.flush()
     
 def restart_on_reconnect():
-    printtolog('TMI asked us to reconnect, restarting bot\n')
+    printtolog('TMI asked us to reconnect, restarting bot')
     os._exit(0)
 
 last_time_symbol = 0

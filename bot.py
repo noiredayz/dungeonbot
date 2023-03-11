@@ -27,6 +27,8 @@ user_regex = re.compile('user-id=(.+?);')
 name_regex = re.compile('name=(.+?);')
 err_name_regex = re.compile(' :(.+?)!')
 
+util.printtolog("Dungeonbot starting up")
+
 util.start()
 
 def live_check():
@@ -80,7 +82,7 @@ def raid_event():
                 time.sleep(message_interval)
             db(opt.GENERAL).update_one(0, { '$set': { 'raid_start': 0 } })
             rand = secrets.randbelow(1800)+5400
-            util.printtolog('Raids: next raid in '+str(rand)+' seconds.\n')
+            util.printtolog('Raids: next raid in '+str(rand)+' seconds.')
             db(opt.GENERAL).update_one(0, { '$set': { 'raid_time': time.time() + rand } })
             if len(raid_users) == 0:
                 if channel_list:
@@ -149,20 +151,23 @@ while True:
     try:
         resp = emoji.demojize(util.sock.recv(4096).decode('utf-8'))
     except:
-        util.printtolog('Socket exception, trying to reconnect.\n')
+        util.printtolog('Socket exception, trying to reconnect.')
         util.sock.close()
         util.connect()
     else:
         if len(resp) == 0:
-            util.printtolog('Socket error: read 0 bytes. Trying to reconnect.\n')
+            util.printtolog('Socket error: read 0 bytes. Trying to reconnect.')
             util.sock.close()
             util.connect()
 
         if resp.startswith('PING'):
             util.pong()
         
+        if resp. startswith('NOTICE'):
+            util.printtolog("TMI sent a notice: "+resp)
+        
         if resp.startswith('RECONNECT'):
-            util.printtolog('Twitch asked us to reconnect, restarting.\n')
+            util.printtolog('Twitch asked us to reconnect, restarting.')
             util.restart_on_reconnect()
 
         elif len(resp) > 0:
