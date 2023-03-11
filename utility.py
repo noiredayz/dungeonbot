@@ -22,7 +22,7 @@ db = opt.MongoDatabase
 server = 'irc.chat.twitch.tv'
 port = 6667
 
-JOINDELAY = 580 #20 joins per 10 seconds, used for normal accounts
+JOINDELAY = 0.580 #20 joins per 10 seconds, used for normal accounts
 
 def connect(manual = False):
     global sock
