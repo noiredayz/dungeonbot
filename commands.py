@@ -85,7 +85,7 @@ def enterdungeon(user_id, display_name, channel):
                 'next_entry': enter_time + dungeon_timeout
             }})
 
-            if dungeon_success <= success_rate:
+            if dungeon_success <= success_rate and user['silentdrop']==0:
                 run_quality = secrets.randbelow(100)+1
                 if run_quality <= 10:
                     experience_gain = int(experience_gain*0.5)
