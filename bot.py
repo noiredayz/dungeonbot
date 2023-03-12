@@ -163,11 +163,7 @@ while True:
         if resp.startswith('PING'):
             util.pong()
         
-        if 'NOTICE' in resp:
-            util.printtolog("TMI sent a notice: "+resp)
-        
-        if 'JOIN' in resp:
-            util.printtolog("JOIN ackowledgement: "+resp)
+        #TODO:add proper JOIN and NOTICE ackowledgement loggin here
         
         if resp.startswith('RECONNECT'):
             util.printtolog('Twitch asked us to reconnect, restarting.')
