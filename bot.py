@@ -163,10 +163,10 @@ while True:
         if resp.startswith('PING'):
             util.pong()
         
-        if resp.startswith('NOTICE'):
+        if 'NOTICE' in resp:
             util.printtolog("TMI sent a notice: "+resp)
         
-        if resp.startswith('JOIN'):
+        if 'JOIN' in resp:
             util.printtolog("JOIN ackowledgement: "+resp)
         
         if resp.startswith('RECONNECT'):
