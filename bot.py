@@ -66,7 +66,7 @@ def raid_event():
         success_rate = 0
         dungeon = db(opt.GENERAL).find_one_by_id(0)
         if int(dungeon['raid_time'] - time.time()) <= 0:
-            raid_level = secrets.randbelow(dungeon['dungeon_level']+2)
+            raid_level = secrets.randbelow(dungeon['dungeon_level']+1)+1
             if auth.raid_level_cap > 0:
                 if raid_level > auth.raid_level_cap:
                     raid_level = auth.raid_level_cap
