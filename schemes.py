@@ -24,7 +24,8 @@ USER = {
     'dungeon_wins': 0,
     'dungeon_losses': 0,
     'last_entry': 0,
-    'next_entry': 0
+    'next_entry': 0,
+    'leaderboardExclude': 0
 }
 
 CHANNELS = {
