@@ -16,6 +16,19 @@ import commands as cmd
 import database as opt
 import messages
 
+RAID_MAX = 0
+RAID_MIN = 0
+
+if auth.raid_level_cap < 0:
+    util.printtolog("Warn: raid max level is set to a negative number and won't be used")
+else:
+    RAID_MAX = auth.raid_level_cap
+
+if auth.raid_level_min < 0 or auth.raid_level_min > auth.raid_level_cap:
+    util.printtolog("Warn: raid minimum level makes no sense (negative number or bigger than the level cap), it won't be used")
+else:
+    RAID_MIN = auth.raid_level_min
+
 db = opt.MongoDatabase
 bot_prefix = '+'
 raid_users = []
@@ -62,15 +75,18 @@ def raid_event():
     time_to_join = 120
     message_interval = 30
     interval_range = time_to_join - message_interval
+    
     while True:
         success_rate = 0
         dungeon = db(opt.GENERAL).find_one_by_id(0)
         if int(dungeon['raid_time'] - time.time()) <= 0:
             raid_level = secrets.randbelow(dungeon['dungeon_level']+1)+1
-            if auth.raid_level_cap > 0:
-                if raid_level > auth.raid_level_cap:
-                    raid_level = auth.raid_level_cap
-            
+            if RAID_MAX > 0:
+                if raid_level > RAID_MAX:
+                    raid_level = RAID_MAX
+            if RAID_MIN > 0:
+                if raid_level < RAID_MIN:
+                    raid_level = RAID_MIN
             db(opt.GENERAL).update_one(0, { '$set': { 'raid_start': 1 } })
             time.sleep(0.5)
             channel_list = db(opt.CHANNELS).find({'online': 0, 'raid_events': 1}).distinct('name')

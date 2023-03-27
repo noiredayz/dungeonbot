@@ -23,4 +23,5 @@ api_website = ''
 
 userAgent = ''
 
-raid_level_cap = 0 #0 - uncapped, any positive integer - raids' leve is capped to this
+raid_level_cap = 0 #0 - uncapped, any positive integer - raids' level is capped to this
+raid_level_min = 0 #0 - uncapped, any positive integer >1 - minimum raid level. cannot be higher than the maxlevel
