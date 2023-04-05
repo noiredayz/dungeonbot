@@ -2,6 +2,7 @@ import emoji
 import auth
 
 nlt2ping = 'monkaLaugh' + emoji.emojize(':thumbs_up:', language='alias') + 'I\'m here'
+nlt2ping = 'monkaLaugh' + emoji.emojize(':thumbs_up:', language='alias') + 'I\'m here'
 
 commands = emoji.emojize(':memo:', language="alias") + ('For a list of commands, visit ' + auth.website if len(auth.website)>0 else 'No command list website is currently set :( ')
 
@@ -52,7 +53,7 @@ def raid_general_stats(raids, raid_word, wins, win_word, losses, lose_word, winr
     return 'General Raid Stats: ' + raids + raid_word + ' / ' + wins + win_word +' / ' + losses + lose_word + ' = ' + winrate + '% Winrate' + emoji.emojize(' :large_orange_diamond:', language="alias")
 
 def raid_event_appear(raid_level, time):
-    return 'A Raid Event at Level [' + raid_level + '] has appeared. Type +join to join the raid! The raid will begin in ' + time + ' seconds!' + emoji.emojize(':zap:', language="alias")
+    return 'A Raid Event at Level [ ' + raid_level + ' ] has appeared. Type +join to join the raid! The raid will begin in ' + time + ' seconds!' + emoji.emojize(':zap:', language="alias")
 
 def raid_event_countdown(time):
     return 'The raid will begin in ' + time + ' seconds. Type +join to join the raid!' + emoji.emojize(':zap:', language="alias")
