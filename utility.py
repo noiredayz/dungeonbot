@@ -157,8 +157,8 @@ def git_info():
     repo = git.Repo(search_parent_directories=True)
     branch = repo.active_branch.name
     sha = repo.head.object.hexsha
-    #queue_message_to_all(messages.startup_message(branch, sha))
-    queue_message_to_one(messages.startup_message(branch, sha), auth.default_channel.lower())
+    queue_message_to_all(messages.startup_message(branch, sha))
+    #queue_message_to_one(messages.startup_message(branch, sha), auth.default_channel.lower())
 
 def start():
     default_admin_id = get_user_id(auth.default_admin)

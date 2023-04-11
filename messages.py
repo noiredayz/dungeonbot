@@ -134,7 +134,7 @@ def set_event_message(mode, channel):
     return 'Raid Events ' + mode + ' in ' + channel + emoji.emojize(' :bell:', language="alias")
 
 def user_bot_message(user):
-    return user + ' is tagged as a Bot ' + emoji.emojize(':robot_face:', language="alias")
+    return user + ' is banned from the bot ' + emoji.emojize(':no_entry:', language="alias")
 
 add_text_error = emoji.emojize(':warning: ', language="alias") + 'Insufficient parameters - usage: +text <vgr/vbr/gr/br/fail> <message>)'
 
