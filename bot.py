@@ -118,6 +118,7 @@ def raid_event():
                 experience_gain = math.ceil(raid_level**1.2 * 27.5 / len(raid_users))
                 if channel_list:
                     util.queue_message_to_some(messages.raid_event_win(str(len(raid_users)), user_word, str(raid_level), str(experience_gain)), channel_list)
+                    util.printtolog("Raid ended: VI VON ZULUL Raiders: "+str(len(raid_users))+", raid level was: "+str(raid_level)+", commandos gained: "+str(experience_gain)+"xp")
                 for user, channel in raid_users:
                     users_by_channel[user].append(channel)
                 for channel in users_by_channel.items():
@@ -149,6 +150,7 @@ def raid_event():
             else:
                 if channel_list:
                     util.queue_message_to_some(messages.raid_event_failed(str(len(raid_users)), user_word, str(raid_level)), channel_list)
+                    util.printtolog("Raid ended: VI LOST Raiders: "+str(len(raid_users))+", raid level was: "+str(raid_level))
                 for user in raid_users:
                     db(opt.USERS).update_one(user[0], {'$inc': {
                         'raid_losses': 1,
