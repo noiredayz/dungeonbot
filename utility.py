@@ -22,8 +22,6 @@ db = opt.MongoDatabase
 server = 'irc.chat.twitch.tv'
 port = 6667
 
-JOINDELAY = 0.580 #20 joins per 10 seconds, used for normal accounts
-
 def connect(manual = False):
     global sock
     sock = socket.socket()
@@ -33,10 +31,8 @@ def connect(manual = False):
         sock.send(('PASS ' + auth.token + '\r\n').encode('utf-8'))
         sock.send(('NICK ' + auth.nickname + '\r\n').encode('utf-8'))
         printtolog("Logged in, requesting capabilities and joinig channels.")
-        sock.send(("CAP REQ :twitch.tv/tags\r\n").encode('utf-8'))
+        #sock.send(("CAP REQ :twitch.tv/tags\r\n").encode('utf-8'))
         channel_list = db(opt.CHANNELS).find({}).distinct('name')
-        #channels = ','.join('#{0}'.format(c) for c in channel_list)
-        #sock.send(('JOIN ' + channels + '\r\n').encode('utf-8'))
         for c in channel_list:
             joinIRCChannel(c)
         printtolog("Channels joined successfully.")
@@ -50,7 +46,7 @@ def connect(manual = False):
 def joinIRCChannel(channel):
     printtolog("Joining #"+channel)
     sock.send(('JOIN #' + channel + '\r\n').encode('utf-8'))
-    time.sleep(JOINDELAY)
+    time.sleep(auth.join_ratelimit)
 
 def get_display_name(id, list = None):
     headers = { 'Authorization': auth.bearer, 'Client-ID': auth.clientID }

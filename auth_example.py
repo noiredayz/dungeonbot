@@ -17,6 +17,9 @@ default_admin = '' #username of the administrator
 
 reconnect_timer = 10
 
+#0.1 for verified bots 0.580 for normal accs
+join_ratelimit = 0.580
+
 website = ''
 leaderboard = ''
 api_website = ''
