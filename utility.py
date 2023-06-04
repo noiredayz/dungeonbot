@@ -31,7 +31,7 @@ def connect(manual = False):
         sock.send(('PASS ' + auth.token + '\r\n').encode('utf-8'))
         sock.send(('NICK ' + auth.nickname + '\r\n').encode('utf-8'))
         printtolog("Logged in, requesting capabilities and joinig channels.")
-        #sock.send(("CAP REQ :twitch.tv/tags\r\n").encode('utf-8'))
+        sock.send(("CAP REQ :twitch.tv/tags\r\n").encode('utf-8'))
         channel_list = db(opt.CHANNELS).find({}).distinct('name')
         for c in channel_list:
             joinIRCChannel(c)
