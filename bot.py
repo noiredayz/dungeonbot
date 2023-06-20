@@ -80,13 +80,16 @@ def raid_event():
         success_rate = 0
         dungeon = db(opt.GENERAL).find_one_by_id(0)
         if int(dungeon['raid_time'] - time.time()) <= 0:
-            raid_level = secrets.randbelow(dungeon['dungeon_level']+1)+1
             if RAID_MAX > 0:
-                if raid_level > RAID_MAX:
-                    raid_level = RAID_MAX
+                targetMax = RAID_MAX
+            else:
+                targetMax = dungeon['dungeon_level']+1
+            
             if RAID_MIN > 0:
-                if raid_level < RAID_MIN:
-                    raid_level = RAID_MIN
+                targetMin = RAID_MIN
+            else:
+                targetMin = 1
+            raid_level = secrets.randbelow(targetMax-targetMin)+1+targetMin
             db(opt.GENERAL).update_one(0, { '$set': { 'raid_start': 1 } })
             time.sleep(0.5)
             channel_list = db(opt.CHANNELS).find({'online': 0, 'raid_events': 1}).distinct('name')
