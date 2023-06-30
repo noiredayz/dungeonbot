@@ -343,6 +343,9 @@ while True:
                                     db(opt.USERS).update_one(user, { '$set': { 'cmd_use_time': time.time() } }, upsert=True)
 
                             if params[0] == 'register':
+                                tags = db(opt.TAGS).find_one_by_id(user)
+                                if tags and tags.get('bot') == 1:
+                                    continue
                                 cmd.register(user, display_name, channel)
 
                             if params[0] == 'suggest':
