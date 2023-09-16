@@ -59,7 +59,7 @@ def live_check():
             sys.stderr.write(traceback.format_exc() + '\n')
             sys.stderr.flush()
         else:
-            if not response['data']:
+            if len(response['data']) == 0:
                 util.printtolog('<online check> Warn: helix sent back an empty dataset. Retrying in 5 seconds.')
                 time.sleep(5)
                 continue
