@@ -70,7 +70,7 @@ def live_check():
                     else:
                         db(opt.CHANNELS).update_one(channel['_id'], { '$set': { 'online': 0 } }, upsert=True)
             except:
-                printtolog('<online check> Error while attempting to parse Helix reply, check error log for details')
+                util.printtolog('<online check> Error while attempting to parse Helix reply, check error log for details')
                 e_t = time.localtime()
                 e_current_time = time.strftime("%Y-%m-%d %H:%M:%S", e_t)
                 sys.stderr.write(e_current_time + ' ' + traceback.format_exc() + '\n')
