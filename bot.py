@@ -74,6 +74,7 @@ def live_check():
                 e_t = time.localtime()
                 e_current_time = time.strftime("%Y-%m-%d %H:%M:%S", e_t)
                 sys.stderr.write(e_current_time + ' ' + traceback.format_exc() + '\n')
+                sys.stderr.flush()
                 time.sleep(5)
                 continue
 
