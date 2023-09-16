@@ -39,25 +39,30 @@ channel_regex = re.compile('MSG #(.+?) ')
 user_regex = re.compile('user-id=(.+?);')
 name_regex = re.compile('name=(.+?);')
 err_name_regex = re.compile(' :(.+?)!')
+online_channels = {}
 
 util.printtolog("Dungeonbot starting up")
 
 util.start()
 
+
 def live_check():
     while True:
-        online_channels = {}
         headers = { 'Authorization': auth.bearer, 'Client-ID': auth.clientID }
         params = []
         for channel in db.raw[opt.CHANNELS].find():
             tuple = ('user_id', channel['_id'])
             params.append(tuple)
         try:
-            response = requests.get('https://api.twitch.tv/helix/streams', headers=headers, params=params).json()
+            response = requests.get('https://api.twitch.tv/helix/streams', headers=headers, params=params, timeout=5).json()
         except:
             sys.stderr.write(traceback.format_exc() + '\n')
             sys.stderr.flush()
         else:
+            if(!response['data'])
+                util.printtolog('<online check> Warn: helix sent back an empty dataset. Retrying in 5 seconds.')
+                time.sleep(5)
+                continue
             for online in response['data']:
                 online_channels[online['user_id']] = online['user_name'].lower()
             for channel in db.raw[opt.CHANNELS].find():
@@ -66,7 +71,7 @@ def live_check():
                 else:
                     db(opt.CHANNELS).update_one(channel['_id'], { '$set': { 'online': 0 } }, upsert=True)
 
-        time.sleep(auth.reconnect_timer)
+        time.sleep(30)
 
 live_check_thread = threading.Thread(target = live_check)
 live_check_thread.start()
