@@ -39,7 +39,6 @@ channel_regex = re.compile('MSG #(.+?) ')
 user_regex = re.compile('user-id=(.+?);')
 name_regex = re.compile('name=(.+?);')
 err_name_regex = re.compile(' :(.+?)!')
-online_channels = {}
 
 util.printtolog("Dungeonbot starting up")
 
@@ -48,6 +47,7 @@ util.start()
 
 def live_check():
     while True:
+        online_channels = {}
         headers = { 'Authorization': auth.bearer, 'Client-ID': auth.clientID }
         params = []
         for channel in db.raw[opt.CHANNELS].find():
@@ -56,20 +56,26 @@ def live_check():
         try:
             response = requests.get('https://api.twitch.tv/helix/streams', headers=headers, params=params, timeout=5).json()
         except:
-            sys.stderr.write(traceback.format_exc() + '\n')
+            e_t = time.localtime()
+            e_current_time = time.strftime("%Y-%m-%d %H:%M:%S", e_t)
+            sys.stderr.write(e_current_time + ' ' + traceback.format_exc() + '\n')
             sys.stderr.flush()
         else:
-            if len(response['data']) == 0:
-                util.printtolog('<online check> Warn: helix sent back an empty dataset. Retrying in 5 seconds.')
+            try:
+                for online in response['data']:
+                    online_channels[online['user_id']] = online['user_name'].lower()
+                for channel in db.raw[opt.CHANNELS].find():
+                    if channel['_id'] in online_channels:
+                        db(opt.CHANNELS).update_one(channel['_id'], {'$set': { 'online': 1 } }, upsert=True)
+                    else:
+                        db(opt.CHANNELS).update_one(channel['_id'], { '$set': { 'online': 0 } }, upsert=True)
+            except:
+                printtolog('<online check> Error while attempting to parse Helix reply, check error log for details')
+                e_t = time.localtime()
+                e_current_time = time.strftime("%Y-%m-%d %H:%M:%S", e_t)
+                sys.stderr.write(e_current_time + ' ' + traceback.format_exc() + '\n')
                 time.sleep(5)
                 continue
-            for online in response['data']:
-                online_channels[online['user_id']] = online['user_name'].lower()
-            for channel in db.raw[opt.CHANNELS].find():
-                if channel['_id'] in online_channels:
-                    db(opt.CHANNELS).update_one(channel['_id'], {'$set': { 'online': 1 } }, upsert=True)
-                else:
-                    db(opt.CHANNELS).update_one(channel['_id'], { '$set': { 'online': 0 } }, upsert=True)
 
         time.sleep(30)
 
@@ -215,6 +221,7 @@ while True:
                             channel = channel.group(1)
                         else:
                             continue
+
 
                         if db(opt.CHANNELS).find_one({'name': channel})['online'] == 0:
 
