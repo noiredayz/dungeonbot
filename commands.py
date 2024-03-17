@@ -245,7 +245,7 @@ def xp(user, display_name, channel, message=None):
             else:
                 util.send_message(messages.not_registered(display_name), channel)
     else:
-		target_user = util.cutusername(message)
+        target_user = util.cutusername(message)
         target = db(opt.USERS).find_one({'username': re.compile('^' + re.escape(target_user) + '$', re.IGNORECASE)})
         if target and target.get('user_level'):
             tags = db(opt.TAGS).find_one_by_id(target['_id'])
@@ -306,7 +306,7 @@ def winrate(user, display_name, channel, message=None):
             else:
                 util.send_message(messages.not_registered(display_name), channel)
     else:
-		target_user = util.cutusername(message)
+        target_user = util.cutusername(message)
         target = db(opt.USERS).find_one({'username': re.compile('^' + re.escape(target_user) + '$', re.IGNORECASE)})
         if target and target.get('user_level'):
             tags = db(opt.TAGS).find_one_by_id(target)
