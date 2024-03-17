@@ -80,13 +80,21 @@ def get_user_id(user):
 
 def pong():
     sock.send(('PONG :tmi.twitch.tv\r\n').encode('utf-8'))
-    
+
 def printtolog(sText):
     t = time.localtime()
     current_time = time.strftime("%Y-%m-%d %H:%M:%S", t)
     sys.stdout.write(current_time+" "+sText+"\n")
     sys.stdout.flush()
-    
+
+def cutusername(unick):
+    retval = unick.strip()
+    if retval.startswith("@"):
+        retval = retval[1:]
+    if retval.endswith(","):
+        retval = retval[:-1]
+    return retval
+
 def restart_on_reconnect():
     printtolog('TMI asked us to reconnect, restarting bot')
     os._exit(0)
