@@ -223,7 +223,6 @@ while True:
                         else:
                             continue
 
-
                         if db(opt.CHANNELS).find_one({'name': channel})['online'] == 0:
 
                             user = user_regex.search(chat_message)

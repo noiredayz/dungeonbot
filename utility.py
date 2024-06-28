@@ -5,6 +5,7 @@ import socket
 import sys
 import threading
 import time
+import json
 
 import datetime
 
@@ -109,10 +110,33 @@ def get_cooldown_bypass_symbol():
         last_time_symbol = 0
         return ' \U000e0000'
 
-def send_message(message, channel):
+def send_message_old(message, channel):
     message = sanitize_message(message, channel)
     msg = 'PRIVMSG #' + channel + ' :' + message + get_cooldown_bypass_symbol()
     sock.send((msg + '\r\n').encode('utf-8'))
+
+def send_message(message, channel):
+    headers = { 'Authorization': auth.bearer, 'Client-ID': auth.clientID, 'Content-Type': 'application/json' }
+    message = '[ HailHelix ] ' + sanitize_message(message, channel)
+    msg = message + get_cooldown_bypass_symbol()
+    chid = db(opt.CHANNELS).find_one({'name': channel})['_id']
+    myid = db(opt.CHANNELS).find_one({'name': auth.nickname.lower()})['_id']
+    params = {'message': message, 'broadcaster_id': chid, 'sender_id': myid}
+    response = requests.post('https://api.twitch.tv/helix/chat/messages', headers=headers, json=params, timeout=5)
+    #TODO: handle non-200 replies here
+    #response.raise_for_status()
+    response = response.json()
+    if 'error' in response:
+        printtolog('Helix: Unable to post message to #' +channel+ ':' +response.status+ ' ' +response.error+ ' ' +response.message)
+        return
+    if not ('data' in response):
+        printtolog('Unhandled: Helix reply to post message is missing the "data" structure doctorWTF')
+        return
+    else:
+        b = response["data"][0]
+        if not b["is_sent"]:
+            printtolog('Error while trying to post "'+message+'" to #'+channel+': '+b["drop_reason"].code+' '+b["drop_reason"].message)
+
 
 queue_message_lock = threading.Lock()
 
@@ -307,7 +331,7 @@ def check_banphrase(message, channel_name):
         return False
 
     time.sleep(random.uniform(0.1, 1))
-    response = requests.post('https://' + banphrase_api + '/api/v1/banphrases/test', headers=headers, json=params)
+    response = requests.post('https://' + banphrase_api + '/api/v1/banphrases/test', headers=headers, json=params, timeout=5)
     response.raise_for_status()
     response = response.json()
     return response
