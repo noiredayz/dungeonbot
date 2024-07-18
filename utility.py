@@ -117,7 +117,7 @@ def send_message_old(message, channel):
 
 def send_message(message, channel):
     headers = { 'Authorization': auth.bearer, 'Client-ID': auth.clientID, 'Content-Type': 'application/json' }
-    message = 'HailHelix ' + sanitize_message(message, channel)
+    message = sanitize_message(message, channel)
     msg = message + get_cooldown_bypass_symbol()
     chid = db(opt.CHANNELS).find_one({'name': channel})['_id']
     myid = db(opt.CHANNELS).find_one({'name': auth.nickname.lower()})['_id']
