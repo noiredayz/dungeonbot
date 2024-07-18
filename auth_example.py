@@ -7,11 +7,12 @@ db_pwd = ''
 db_host = 'localhost'
 db_port = 27017
 
-token = ''
-bearer = 'Bearer ' + '' # Token without oauth:
+auth_code = ''
+token = 'oauth:' + auth_code
+bearer = 'Bearer ' + auth_code
 clientID = ''
 nickname = ''
-default_channel = ''
+default_channel = '' #lower case
 
 default_admin = '' #username of the administrator
 

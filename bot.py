@@ -54,7 +54,7 @@ def live_check():
             tuple = ('user_id', channel['_id'])
             params.append(tuple)
         try:
-            response = requests.get('https://api.twitch.tv/helix/streams', headers=headers, params=params, timeout=5).json()
+            response = requests.get('https://api.twitch.tv/helix/streams', headers=headers, params=params, timeout=7).json()
         except:
             e_t = time.localtime()
             e_current_time = time.strftime("%Y-%m-%d %H:%M:%S", e_t)
@@ -78,7 +78,7 @@ def live_check():
                 time.sleep(5)
                 continue
 
-        time.sleep(30)
+        time.sleep(40)
 
 live_check_thread = threading.Thread(target = live_check)
 live_check_thread.start()
@@ -222,7 +222,6 @@ while True:
                             channel = channel.group(1)
                         else:
                             continue
-
 
                         if db(opt.CHANNELS).find_one({'name': channel})['online'] == 0:
 
