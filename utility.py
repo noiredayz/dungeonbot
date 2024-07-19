@@ -127,7 +127,9 @@ def send_message(message, channel):
     #response.raise_for_status()
     response = response.json()
     if 'error' in response:
-        printtolog('Helix: Unable to post message to #' +channel+ ':' +response.status+ ' ' +response.error+ ' ' +response.message)
+        #printtolog('Helix: Unable to post message to #' +channel+ ':' +response.status+ ' ' +response.error+ ' ' +response.message)
+        printtolog('Helix: Unable to post "'+ message +'" to #' +channel+ ', reason:')
+        printtolog(json.dumps(response, indent=2))
         return
     if not ('data' in response):
         printtolog('Unhandled: Helix reply to post message is missing the "data" structure doctorWTF')
