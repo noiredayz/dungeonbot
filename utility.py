@@ -137,8 +137,9 @@ def send_message(message, channel):
     else:
         b = response["data"][0]
         if not b["is_sent"]:
-            printtolog('Error while trying to post "'+message+'" to #'+channel+': '+b["drop_reason"].code+' '+b["drop_reason"].message)
-
+            #printtolog('Error while trying to post "'+message+'" to #'+channel+': '+b["drop_reason"].code+' '+b["drop_reason"].message)
+            printtolog('Helix: message "'+ message +'" was not sent to #' +channel+ ', reason:')
+            printtolog(json.dumps(response, indent=2))
 
 queue_message_lock = threading.Lock()
 
