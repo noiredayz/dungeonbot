@@ -177,6 +177,11 @@ def raid_event():
             users_by_channel.clear()
         time.sleep(60)
 
+def checkPersonalComands(display_name, command):
+    if display_name == "hewooo" and command == "hewoooEd":
+        return "ed"
+    return None
+
 raid_event_thread = threading.Thread(target = raid_event)
 raid_event_thread.start()
 
@@ -276,6 +281,8 @@ while True:
 
                                 db(opt.USERS).update_one(user, { '$set': { 'username': display_name } }, upsert=True)
 
+                                params[0] = checkPersonalComands(display_name, params[0]) or params[0]
+                                
                                 if params[0] == 'commands' or params[0] == 'help' or params[0] == 'bot':
                                     cmd.commands(channel)
                                     db(opt.CHANNELS).update_one_by_name(channel, { '$set': { 'cmd_use_time': time.time() } }, upsert=True)
